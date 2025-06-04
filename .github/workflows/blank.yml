@@ -6,39 +6,23 @@ on:
       - uat
 
 jobs:
-  fetch-required-files:
+  check-files-in-dev:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout `project` branch (for required_files.txt)
         uses: actions/checkout@v3
         with:
           ref: project
-        
+
       - name: Copy required_files.txt for validation
         run: cp required_files.txt /tmp/required_files.txt
 
-      - name: Upload required_files.txt for use in next job
-        uses: actions/upload-artifact@v3
-        with:
-          name: required-files
-          path: /tmp/required_files.txt
-
-  check-files-in-dev:
-    needs: fetch-required-files
-    runs-on: ubuntu-latest
-    steps:
       - name: Checkout `dev` branch (for actual file checks)
         uses: actions/checkout@v3
         with:
           ref: dev
 
-      - name: Download required_files.txt
-        uses: actions/download-artifact@v3
-        with:
-          name: required-files
-          path: /tmp
-
-      - name:  List files in /tmp
+      - name: Debug: List files in /tmp
         run: ls -l /tmp
 
       - name: Verify required files
