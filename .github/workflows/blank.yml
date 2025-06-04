@@ -14,16 +14,14 @@ jobs:
       with:
         ref: project
         
-    - name: list
-      run: ls -l /tmp
-
-    
     - name: Copy required_files.txt for validation
       run: cp required_files.txt /tmp/required_files.txt
     
-    - name: Display required file list
-      run: cat /tmp/required_files.txt
-
+    - name: Upload required_files.txt for use in next job
+      uses: actions/upload-artifact@v3
+      with:
+        name: required-files
+        path: /tmp/required_files.txt
 
   check-files-in-dev:
     needs: fetch-required-files
@@ -33,6 +31,15 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: dev
+
+      - name: Download required_files.txt
+        uses: actions/download-artifact@v3
+        with:
+          name: required-files
+          path: /tmp
+
+      - name: Debug: List files in /tmp
+        run: ls -l /tmp
 
       - name: Verify required files
         run: |
@@ -49,4 +56,4 @@ jobs:
           done < /tmp/required_files.txt
 
       - name: Approval to proceed
-        run: echo "All required files exist in dev. Ready for PR!"
+        run: echo "✅ All required files exist in dev. Ready for PR!"
