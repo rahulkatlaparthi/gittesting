@@ -38,7 +38,7 @@ jobs:
           name: required-files
           path: /tmp
 
-      - name: Debug: List files in /tmp
+      - name:  List files in /tmp
         run: ls -l /tmp
 
       - name: Verify required files
