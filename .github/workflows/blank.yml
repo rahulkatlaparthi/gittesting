@@ -9,13 +9,21 @@ jobs:
   fetch-required-files:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout `project` branch (for required_files.txt)
-        uses: actions/checkout@v3
-        with:
-          ref: project
+    - name: Checkout `project` branch (for required_files.txt)
+      uses: actions/checkout@v3
+      with:
+        ref: project
+        
+    - name: list
+      run: ls -l /tmp
 
-      - name: Copy required_files.txt for validation
-        run: cp required_files.txt /tmp/required_files.txt
+    
+    - name: Copy required_files.txt for validation
+      run: cp required_files.txt /tmp/required_files.txt
+    
+    - name: Display required file list
+      run: cat /tmp/required_files.txt
+
 
   check-files-in-dev:
     needs: fetch-required-files
